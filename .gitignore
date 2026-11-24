@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+vendor/
+metricpulse.duckdb
+metricpulse.duckdb.wal
+dbt_project/target/
+dbt_project/logs/
+frontend/node_modules/
+frontend/dist/
+.env

@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: fct_revenue
+    description: "Completed order revenue at order grain"
+    meta:
+      grain: order_id
+      primary_key: order_id
+      partition_col: order_date
+      dimensions: ["region", "plan_tier", "payment_gateway"]
+      metric:
+        name: net_revenue_usd
+        label: "Net Revenue (USD)"
+        type: sum
+        expr: "SUM(net_revenue_usd)"
+
+  - name: fct_checkout_funnel
+    description: "Checkout session conversion funnel"
+    meta:
+      grain: checkout_session_id
+      primary_key: checkout_session_id
+      partition_col: event_date
+      dimensions: ["region", "device_os", "payment_gateway", "app_version"]
+      metric:
+        name: checkout_conversion_rate
+        label: "EU Checkout Conversion"
+        type: rate
+        numerator: "SUM(converted)"
+        denominator: "COUNT(*)"
+
+  - name: fct_enterprise_dau
+    description: "Daily active Enterprise users aggregated by region"
+    meta:
+      grain: usage_date_region
+      primary_key: usage_date
+      partition_col: usage_date
+      dimensions: ["region", "plan_tier"]
+      metric:
+        name: enterprise_dau
+        label: "Enterprise DAU"
+        type: sum
+        expr: "SUM(active_users)"
+
+  - name: fct_trial_conversions
+    description: "Trial-to-paid conversion events"
+    meta:
+      grain: trial_id
+      primary_key: trial_id
+      partition_col: trial_date
+      dimensions: ["plan_tier", "acquisition_channel"]
+      metric:
+        name: trial_to_paid_rate
+        label: "Trial-to-Paid Conversion"
+        type: rate
+        numerator: "SUM(converted)"
+        denominator: "COUNT(*)"
